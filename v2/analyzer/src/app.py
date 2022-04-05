@@ -21,7 +21,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Define global variables
 
-global tone_analyzer_ep
+global naturallanguageunderstanding_ep
 
 global identity_token_url
 
@@ -36,7 +36,7 @@ global is_refresh
 global expire_time
 
 def analyze_tone(input_text):
-    log.info("tone_analyzer_ep is: %s ", tone_analyzer_ep)
+    log.info("naturallanguageunderstanding_ep is: %s ", naturallanguageunderstanding_ep)
 
     # before getting tone, check if token is expired and refresh if so.
     if datetime.utcnow() > expire_time:
@@ -53,7 +53,7 @@ def analyze_tone(input_text):
      'Authorization': 'Bearer ' + access_token,
     }
 
-    r = requests.post(tone_analyzer_ep, headers=headers, data=input_text)
+    r = requests.post(naturallanguageunderstanding_ep, headers=headers, data=input_text)
     log.info("tone_analyzer_ep response code is: %s ", r.status_code)
     if r.status_code != 200:
         log.error("FAILED analyze tone: '%s', msg: '%s'", input_text, r.text)
@@ -89,7 +89,7 @@ POST identity/token method to generate an IAM access token by passing an API key
 @retry(Exception, delay=2, tries=5)
 def generate_tokens(refresh):
 
-	api_key = os.getenv('TONE_ANALYZER_API_KEY')
+	api_key = os.getenv('NATURALLANGUAGEUNDERSTANDING_API_KEY')
 
 	params = None
 
@@ -106,7 +106,7 @@ def generate_tokens(refresh):
 	if api_key:
 		log.info("api key is there.")
 	else :
-		log.error("TONE_ANALYZER_API_KEY not set")
+		log.error("NATURALLANGUAGEUNDERSTANDING_API_KEY not set")
 
 	if refresh:
 		headers = {
@@ -167,13 +167,13 @@ if __name__ == '__main__':
 
     PORT = '5000'
 
-    api_url = os.getenv('TONE_ANALYZER_SERVICE_API')
+    api_url = os.getenv('NATURALLANGUAGEUNDERSTANDING_API_KEY')
 
     if not api_url:
-        log.error("TONE_ANALYZER_SERVICE_API not set")
+        log.error("NATURALLANGUAGEUNDERSTANDING_API_KEY not set")
 
     # https://gateway.watsonplatform.net/tone-analyzer/api/v3/tone?version=2017-09-21&sentences=false
-    tone_analyzer_ep = "" + api_url + "/v3/tone?version=2017-09-21&sentences=false"
+    naturallanguageunderstanding_ep = "" + api_url + "/v3/tone?version=2017-09-21&sentences=false"
 
     identity_token_url = "https://iam.cloud.ibm.com/identity/token"
 
@@ -185,5 +185,5 @@ except Exception as err:
 	log.debug('SSL connection failed: %s', str(err))
 
 finally :
-	log.info("Starting analyzer tone_analyzer_ep: %s ", tone_analyzer_ep)
+	log.info("Starting analyzer naturallanguageunderstanding_ep: %s ", naturallanguageunderstanding_ep)
 	app.run(host='0.0.0.0', port=int(PORT))
